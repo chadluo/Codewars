@@ -15,7 +15,6 @@ l' xs = length xs + (sum . map length) xs - 1
 l'' = (sum . map length)
 
 unwords' :: Int -> [String] -> String
-unwords' _ [] = []
 unwords' _ [x] = x
 unwords' width (t:ts) = t ++ (replicate x ' ') ++ unwords' (width - x) ts where
   x = width `div` l + if width `mod` l == 0 then 0 else 1
