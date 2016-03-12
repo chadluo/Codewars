@@ -4,17 +4,13 @@ import           Control.Arrow ((&&&))
 import           Data.List     (group, (\\))
 
 prime_factors :: Integer -> String
-prime_factors = printFac . map (head &&& length) . group . factorise
+prime_factors = printFac . map (head &&& length) . group . factor
 
-factorise :: Integer -> [Integer]
-factorise n = t (2 : ([3, 5 .. (div n 2)] ++ [n])) n;
-
-t :: [Integer] -> Integer -> [Integer]
-t [] _ = []
-t _ 1  = []
-t ps n = if r == 0 then h : t ps q else t (tail ps) n where
-  h = head ps
-  (q, r) = divMod n h
+-- https://wiki.haskell.org/99_questions/Solutions/35
+factor 1 = []
+factor n = let divisors = dropWhile ((/= 0) . mod n) [2 .. ceiling $ sqrt $ fromIntegral n]
+           in let prime = if null divisors then n else head divisors
+              in (prime :) $ factor $ div n prime
 
 printFac :: [(Integer, Int)] -> String
 printFac = foldl f "" where
