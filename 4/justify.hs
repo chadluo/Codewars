@@ -11,12 +11,12 @@ linify w = l w [] where
 
 spacify :: Int -> [[String]] -> [String]
 spacify _ [x]    = [unwords x]
-spacify w (x:xs) = unwords' l x : spacify w xs where
-  l = w - (sum . map length) x
+spacify w (x:xs) = unwords' w x : spacify w xs where
   unwords' _ [y]    = y
-  unwords' w (y:ys) = y ++ replicate m ' ' ++ unwords' (w - m) ys where
-    m = w `div` l' + if w `mod` l' == 0 then 0 else 1
-    l' = length ys
+  unwords' w str@(y:ys) = y ++ replicate m ' ' ++ unwords' (w - m - length y) ys where
+    m = total `div` slots + if total `rem` slots == 0 then 0 else 1
+    total = w - (sum . map length) str
+    slots = length ys
 
 test  = putStrLn $ justify "123 45 6" 7
 test1 = putStrLn $ justify sample 30
